@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.8.0 (2026-05-20)
+
+- Add compass docker subcommand + frontend focus refetch
+- Archive simplify-theme-toggle change
+
 ## 1.7.0 (2026-05-20)
 
 - Simplify theme toggle to light/dark + adopt Tommy Hilfiger palette
