@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   prepare:
-    if: github.repository == 'ehsangazar/Compass'
+    if: github.repository == 'ehsangazar/compass'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

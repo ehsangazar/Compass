@@ -20,7 +20,7 @@ The token is stored at `vps/npm-token.txt` (outside this repo).
 - npm username: `gazarr`
 - Scope: `@gazarr`
 - Package: `@gazarr/compass`
-- GitHub repo: https://github.com/ehsangazar/Compass
+- GitHub repo: https://github.com/ehsangazar/compass
 
 The npm username (`gazarr`) and the GitHub username (`ehsangazar`) are intentionally different. The npm scope must match the npm account, so the package name is `@gazarr/compass` even though the source lives under `ehsangazar` on GitHub.
 
