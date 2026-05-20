@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.8.1 (2026-05-20)
+
+- Move default port from 5173 to 51234
+- Archive docker-runner change
+
 ## 1.8.0 (2026-05-20)
 
 - Add compass docker subcommand + frontend focus refetch
