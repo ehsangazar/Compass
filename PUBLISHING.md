@@ -1,79 +1,76 @@
-# Publishing @gazarr/compass
+# Publishing
 
 ## TL;DR
 
 ```bash
-pnpm build
-npm publish --access public --userconfig /tmp/compass-npmrc
+pnpm release patch     # or minor / major
+git push origin main --follow-tags
 ```
 
-…where `/tmp/compass-npmrc` contains:
+That's it. The `v*` tag push triggers `.github/workflows/release.yml`, which publishes to npm and creates a GitHub Release.
 
+## What the release script does
+
+`scripts/release.mjs`:
+
+1. Verifies you're on `main` with a clean tree, up to date with origin.
+2. Bumps `package.json` to the next version (computed from `patch|minor|major`).
+3. Collects commits since the last `v*` tag and prepends a new section to `CHANGELOG.md`.
+4. Updates `pnpm-lock.yaml`.
+5. Creates a `chore(release): vX.Y.Z` commit and an annotated `vX.Y.Z` tag.
+6. Prints the push command. **Nothing is pushed automatically.**
+
+If you want to back out before pushing:
+
+```bash
+git tag -d vX.Y.Z
+git reset --hard HEAD~1
 ```
-//registry.npmjs.org/:_authToken=<npm_automation_token>
-```
 
-The token is stored at `vps/npm-token.txt` (outside this repo).
+## What the workflow does
 
-## Account
+`.github/workflows/release.yml` triggers on any `v*` tag push:
+
+1. Checks out the tagged commit.
+2. Installs deps, runs `pnpm build`.
+3. Verifies the tag name matches `package.json` version (catches accidental hand-tagging).
+4. `npm publish --access public` using the `NPM_TOKEN` repo secret.
+5. Extracts the matching section from `CHANGELOG.md` and creates a GitHub Release.
+
+## Account / package facts
 
 - npm username: `gazarr`
-- Scope: `@gazarr`
-- Package: `@gazarr/compass`
+- Scope / package: `@gazarr/compass`
 - GitHub repo: https://github.com/ehsangazar/compass
 
-The npm username (`gazarr`) and the GitHub username (`ehsangazar`) are intentionally different. The npm scope must match the npm account, so the package name is `@gazarr/compass` even though the source lives under `ehsangazar` on GitHub.
-
-## First-time setup
-
-If publishing from a fresh machine:
-
-1. Get the npm Automation token from `vps/npm-token.txt`.
-2. Save it to an isolated npmrc (so it isn't written to your global `~/.npmrc`):
-   ```bash
-   echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > /tmp/compass-npmrc
-   chmod 600 /tmp/compass-npmrc
-   ```
-3. Verify auth:
-   ```bash
-   npm --userconfig /tmp/compass-npmrc whoami    # → gazarr
-   ```
-
-The Automation token bypasses 2FA, so no OTP is needed.
-
-## Releasing a new version
-
-This repo uses [Changesets](https://github.com/changesets/changesets) for version management.
-
-1. Make code changes.
-2. Add a changeset describing the change and its bump type:
-   ```bash
-   pnpm changeset
-   ```
-   Pick `patch` / `minor` / `major`, write a one-line summary. This creates a markdown file in `.changeset/`.
-3. Commit and push to `main`.
-4. The `release-prepare.yml` GitHub Action opens (or updates) a "Version Packages" PR that bumps `package.json` and updates `CHANGELOG.md`.
-5. Merge that PR. The workflow runs `pnpm run release:ci`, which publishes to npm via `changeset publish`.
+The npm scope (`gazarr`) intentionally differs from the GitHub username (`ehsangazar`) — npm scopes must match the publishing account.
 
 ## Manual publish (bypass the workflow)
 
-If you need to publish from your laptop without going through CI:
+If CI is broken or you need to ship from your laptop:
 
 ```bash
-# bump version + changelog locally
-pnpm exec changeset version
+# Token at vps/npm-token.txt (extract the Token: line)
+echo "//registry.npmjs.org/:_authToken=<token>" > /tmp/compass-npmrc
+chmod 600 /tmp/compass-npmrc
 
-# build, publish, push tag
 pnpm build
 npm publish --access public --userconfig /tmp/compass-npmrc
-git add -A && git commit -m "chore(release): version packages"
-git tag "v$(node -p "require('./package.json').version")"
-git push --follow-tags
+
+rm /tmp/compass-npmrc
 ```
 
-## Token rotation
+The local flow has no CI-specific paths, so it's identical to what the workflow does.
+
+## Rotating the npm token
 
 1. Generate a new Automation token at https://www.npmjs.com/settings/gazarr/tokens.
 2. Update `vps/npm-token.txt`.
-3. Update the `NPM_TOKEN` secret on the GitHub repo if it's set there.
+3. `gh secret set NPM_TOKEN --repo ehsangazar/compass` (paste new value when prompted).
 4. Revoke the old token.
+
+## Required GitHub setup (one-time, already done)
+
+- Repo secret `NPM_TOKEN` set to an npm Automation token.
+- `Settings → Actions → General → Workflow permissions`: "Read and write" + "Allow GitHub Actions to create and approve pull requests".
+- npm account 2FA mode set to "Authorization only" (not "Auth and writes"), so Automation tokens can publish without OTP.
