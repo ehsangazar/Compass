@@ -1,52 +1,31 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark' | 'system';
+type Theme = 'light' | 'dark';
 
 interface ThemeContextValue {
   theme: Theme;
-  resolvedTheme: 'light' | 'dark';
   setTheme: (theme: Theme) => void;
+  toggle: () => void;
 }
 
 const STORAGE_KEY = 'compass-theme';
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-function getSystemTheme(): 'light' | 'dark' {
+function readInitial(): Theme {
   if (typeof window === 'undefined') return 'light';
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-function readStored(): Theme {
-  if (typeof window === 'undefined') return 'system';
   const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored === 'light' || stored === 'dark' || stored === 'system') return stored;
-  return 'system';
+  if (stored === 'light' || stored === 'dark') return stored;
+  // Legacy 'system' entries (or anything else) get coerced once.
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(readStored);
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() =>
-    readStored() === 'system' ? getSystemTheme() : (readStored() as 'light' | 'dark')
-  );
+  const [theme, setThemeState] = useState<Theme>(readInitial);
 
   useEffect(() => {
-    const root = document.documentElement;
-    const effective: 'light' | 'dark' = theme === 'system' ? getSystemTheme() : theme;
-    setResolvedTheme(effective);
-    root.classList.toggle('dark', effective === 'dark');
-  }, [theme]);
-
-  useEffect(() => {
-    if (theme !== 'system') return;
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const handler = (): void => {
-      const effective = media.matches ? 'dark' : 'light';
-      setResolvedTheme(effective);
-      document.documentElement.classList.toggle('dark', effective === 'dark');
-    };
-    media.addEventListener('change', handler);
-    return () => media.removeEventListener('change', handler);
+    document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
   const setTheme = (next: Theme): void => {
@@ -54,8 +33,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setThemeState(next);
   };
 
+  const toggle = (): void => setTheme(theme === 'light' ? 'dark' : 'light');
+
   return (
-    <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggle }}>
       {children}
     </ThemeContext.Provider>
   );

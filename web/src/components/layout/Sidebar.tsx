@@ -7,7 +7,6 @@ import {
   FileText,
   Moon,
   Sun,
-  Monitor,
   CircleDot,
   CheckCircle2,
   Circle,
@@ -173,21 +172,16 @@ function SidebarChange({ change }: { change: ChangeSummary }) {
 }
 
 function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const next: Record<typeof theme, typeof theme> = {
-    light: 'dark',
-    dark: 'system',
-    system: 'light',
-  };
-  const Icon = theme === 'light' ? Sun : theme === 'dark' ? Moon : Monitor;
-  const label = theme === 'light' ? 'Light' : theme === 'dark' ? 'Dark' : 'System';
+  const { theme, toggle } = useTheme();
+  const Icon = theme === 'dark' ? Sun : Moon;
+  const label = theme === 'dark' ? 'Light' : 'Dark';
   return (
     <Button
       variant="outline"
       size="sm"
-      onClick={() => setTheme(next[theme])}
+      onClick={toggle}
       className="gap-2"
-      title={`Theme: ${label} (click to cycle)`}
+      title={`Switch to ${label.toLowerCase()} theme`}
     >
       <Icon className="h-3.5 w-3.5" />
       {label}

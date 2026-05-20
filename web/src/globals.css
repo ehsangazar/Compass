@@ -51,90 +51,100 @@
   --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 }
 
+/*
+ * Tommy Hilfiger-inspired palette.
+ * Brand triad:
+ *   Navy  #001f5f  hsl(220, 100%, 19%)
+ *   Red   #c8102e  hsl(351,  86%, 42%)
+ *   White #ffffff  hsl(  0,   0%, 100%)
+ * Navy carries the brand voice (primary, foreground in light, background in
+ * dark). Red is reserved for destructive + brand accents so it stays loud.
+ */
+
 :root {
   --background: 0 0% 100%;
-  --foreground: 222 47% 11%;
+  --foreground: 220 100% 12%;
 
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 220 100% 12%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 220 100% 12%;
 
-  --primary: 222 47% 11%;
-  --primary-foreground: 210 40% 98%;
+  --primary: 220 100% 19%;
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222 47% 11%;
+  --secondary: 213 33% 95%;
+  --secondary-foreground: 220 100% 19%;
 
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
+  --muted: 213 33% 96%;
+  --muted-foreground: 220 18% 40%;
 
-  --accent: 210 40% 96%;
-  --accent-foreground: 222 47% 11%;
+  --accent: 213 50% 93%;
+  --accent-foreground: 220 100% 19%;
 
-  --destructive: 0 72% 51%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 351 86% 42%;
+  --destructive-foreground: 0 0% 100%;
 
-  --success: 142 71% 35%;
-  --success-foreground: 210 40% 98%;
+  --success: 142 71% 32%;
+  --success-foreground: 0 0% 100%;
 
   --warning: 38 92% 50%;
-  --warning-foreground: 222 47% 11%;
+  --warning-foreground: 220 100% 12%;
 
-  --border: 214 32% 91%;
-  --input: 214 32% 91%;
-  --ring: 222 47% 11%;
+  --border: 214 32% 88%;
+  --input: 214 32% 88%;
+  --ring: 220 100% 19%;
 
-  --sidebar: 210 40% 98%;
-  --sidebar-foreground: 222 47% 11%;
-  --sidebar-border: 214 32% 91%;
-  --sidebar-accent: 210 40% 94%;
-  --sidebar-accent-foreground: 222 47% 11%;
+  --sidebar: 213 30% 96%;
+  --sidebar-foreground: 220 100% 19%;
+  --sidebar-border: 214 32% 88%;
+  --sidebar-accent: 213 40% 90%;
+  --sidebar-accent-foreground: 220 100% 19%;
 
   --radius: 0.625rem;
 }
 
 .dark {
-  --background: 222 47% 6%;
-  --foreground: 210 40% 98%;
+  --background: 220 70% 7%;
+  --foreground: 0 0% 98%;
 
-  --card: 222 47% 8%;
-  --card-foreground: 210 40% 98%;
+  --card: 220 60% 10%;
+  --card-foreground: 0 0% 98%;
 
-  --popover: 222 47% 8%;
-  --popover-foreground: 210 40% 98%;
+  --popover: 220 60% 10%;
+  --popover-foreground: 0 0% 98%;
 
-  --primary: 210 40% 98%;
-  --primary-foreground: 222 47% 11%;
+  --primary: 0 0% 100%;
+  --primary-foreground: 220 100% 19%;
 
-  --secondary: 217 33% 17%;
-  --secondary-foreground: 210 40% 98%;
+  --secondary: 220 40% 16%;
+  --secondary-foreground: 0 0% 98%;
 
-  --muted: 217 33% 17%;
-  --muted-foreground: 215 20% 65%;
+  --muted: 220 40% 16%;
+  --muted-foreground: 215 20% 70%;
 
-  --accent: 217 33% 20%;
-  --accent-foreground: 210 40% 98%;
+  --accent: 220 40% 20%;
+  --accent-foreground: 0 0% 98%;
 
-  --destructive: 0 63% 48%;
-  --destructive-foreground: 210 40% 98%;
+  --destructive: 351 86% 52%;
+  --destructive-foreground: 0 0% 100%;
 
-  --success: 142 60% 45%;
-  --success-foreground: 222 47% 11%;
+  --success: 142 55% 50%;
+  --success-foreground: 220 100% 12%;
 
-  --warning: 38 92% 55%;
-  --warning-foreground: 222 47% 11%;
+  --warning: 38 92% 60%;
+  --warning-foreground: 220 100% 12%;
 
-  --border: 217 33% 18%;
-  --input: 217 33% 18%;
-  --ring: 213 27% 84%;
+  --border: 220 30% 18%;
+  --input: 220 30% 18%;
+  --ring: 0 0% 100%;
 
-  --sidebar: 222 47% 7%;
-  --sidebar-foreground: 210 40% 98%;
-  --sidebar-border: 217 33% 18%;
-  --sidebar-accent: 217 33% 14%;
-  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar: 220 70% 5%;
+  --sidebar-foreground: 0 0% 98%;
+  --sidebar-border: 220 30% 16%;
+  --sidebar-accent: 220 40% 14%;
+  --sidebar-accent-foreground: 0 0% 98%;
 }
 
 * {
