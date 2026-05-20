@@ -644,8 +644,8 @@ export class InitCommand {
 
     // Links
     console.log();
-    console.log(`Learn more: ${chalk.cyan('https://github.com/gaz/Compass')}`);
-    console.log(`Feedback:   ${chalk.cyan('https://github.com/gaz/Compass/issues')}`);
+    console.log(`Learn more: ${chalk.cyan('https://github.com/ehsangazar/compass')}`);
+    console.log(`Feedback:   ${chalk.cyan('https://github.com/ehsangazar/compass/issues')}`);
 
     // Restart instruction if any tools were configured
     if (results.createdTools.length > 0 || results.refreshedTools.length > 0) {
