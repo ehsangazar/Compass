@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.7.0 (2026-05-20)
+
+- Simplify theme toggle to light/dark + adopt Tommy Hilfiger palette
+- Archive redesign-web-admin change
+
 ## 1.6.0 (2026-05-20)
 
 - Rebuild compass web as an admin panel (Tailwind v4 + shadcn-style)
