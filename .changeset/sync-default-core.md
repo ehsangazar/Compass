@@ -1,5 +1,5 @@
 ---
-"@gaz/compass": minor
+"@gazarr/compass": minor
 ---
 
 ### New Features

@@ -24,7 +24,7 @@ Use this structure for your changeset content:
 
 ```markdown
 ---
-"@gaz/compass": patch
+"@gazarr/compass": patch
 ---
 
 ### New Features
