@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CircleDot, CheckCircle2, Circle } from 'lucide-react';
 import { api, ChangeSummary } from '../api';
+import { useApi } from '../lib/useApi';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Card } from '../components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../components/ui/tabs';
@@ -13,15 +14,9 @@ const FILTERS = ['all', 'active', 'draft', 'archived'] as const;
 type Filter = (typeof FILTERS)[number];
 
 export default function ChangesList() {
-  const [changes, setChanges] = useState<ChangeSummary[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { data, error } = useApi(() => api.changes());
+  const changes = data?.changes ?? null;
   const [filter, setFilter] = useState<Filter>('all');
-
-  useEffect(() => {
-    api.changes()
-      .then((res) => setChanges(res.changes))
-      .catch((err) => setError(String(err)));
-  }, []);
 
   const counts = useMemo(() => {
     const c = changes ?? [];

@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CircleDot, CheckCircle2, Circle, FileText, ArrowRight } from 'lucide-react';
 import { api, ChangeSummary, Overview as OverviewData, SpecSummary } from '../api';
+import { useApi } from '../lib/useApi';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Skeleton } from '../components/ui/skeleton';
@@ -9,21 +9,20 @@ import { Progress } from '../components/ui/progress';
 import { Badge } from '../components/ui/badge';
 import { Button } from '../components/ui/button';
 
-export default function Overview() {
-  const [data, setData] = useState<OverviewData | null>(null);
-  const [changes, setChanges] = useState<ChangeSummary[]>([]);
-  const [specs, setSpecs] = useState<SpecSummary[]>([]);
-  const [error, setError] = useState<string | null>(null);
+interface OverviewBundle {
+  overview: OverviewData;
+  changes: ChangeSummary[];
+  specs: SpecSummary[];
+}
 
-  useEffect(() => {
-    Promise.all([api.overview(), api.changes(), api.specs()])
-      .then(([overview, c, s]) => {
-        setData(overview);
-        setChanges(c.changes);
-        setSpecs(s.specs);
-      })
-      .catch((err) => setError(String(err)));
-  }, []);
+export default function Overview() {
+  const { data: bundle, error } = useApi<OverviewBundle>(async () => {
+    const [overview, c, s] = await Promise.all([api.overview(), api.changes(), api.specs()]);
+    return { overview, changes: c.changes, specs: s.specs };
+  });
+  const data = bundle?.overview ?? null;
+  const changes = bundle?.changes ?? [];
+  const specs = bundle?.specs ?? [];
 
   if (error)
     return (

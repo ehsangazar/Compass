@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
-import { api, SpecDetail as SpecDetailData } from '../api';
+import { api } from '../api';
+import { useApi } from '../lib/useApi';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Card, CardContent } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -10,17 +10,7 @@ import Markdown from '../components/Markdown';
 
 export default function SpecDetail() {
   const { name } = useParams<{ name: string }>();
-  const [data, setData] = useState<SpecDetailData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!name) return;
-    setData(null);
-    setError(null);
-    api.spec(name)
-      .then(setData)
-      .catch((err) => setError(String(err)));
-  }, [name]);
+  const { data, error } = useApi(() => api.spec(name ?? ''), [name]);
 
   if (error)
     return (

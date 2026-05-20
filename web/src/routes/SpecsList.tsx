@@ -1,20 +1,14 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FileText } from 'lucide-react';
-import { api, SpecSummary } from '../api';
+import { api } from '../api';
+import { useApi } from '../lib/useApi';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Card, CardContent } from '../components/ui/card';
 import { Skeleton } from '../components/ui/skeleton';
 
 export default function SpecsList() {
-  const [specs, setSpecs] = useState<SpecSummary[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    api.specs()
-      .then((res) => setSpecs(res.specs))
-      .catch((err) => setError(String(err)));
-  }, []);
+  const { data, error } = useApi(() => api.specs());
+  const specs = data?.specs ?? null;
 
   return (
     <div className="space-y-6">

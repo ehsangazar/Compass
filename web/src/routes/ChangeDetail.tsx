@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { ArrowLeft, FileText, AlertCircle } from 'lucide-react';
-import { api, ChangeDetail as ChangeDetailData } from '../api';
+import { api } from '../api';
+import { useApi } from '../lib/useApi';
 import { PageHeader } from '../components/layout/PageHeader';
 import { Card, CardContent } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
@@ -15,17 +15,7 @@ const ARTIFACTS = ['proposal', 'design', 'specs', 'tasks'] as const;
 
 export default function ChangeDetail() {
   const { name } = useParams<{ name: string }>();
-  const [data, setData] = useState<ChangeDetailData | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!name) return;
-    setData(null);
-    setError(null);
-    api.change(name)
-      .then(setData)
-      .catch((err) => setError(String(err)));
-  }, [name]);
+  const { data, error } = useApi(() => api.change(name ?? ''), [name]);
 
   if (error)
     return (

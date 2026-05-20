@@ -9,6 +9,7 @@ import { ListCommand } from '../core/list.js';
 import { ArchiveCommand } from '../core/archive.js';
 import { ViewCommand } from '../core/view.js';
 import { runWebCommand } from '../commands/web.js';
+import * as dockerCmd from '../commands/docker.js';
 import { registerSpecCommand } from '../commands/spec.js';
 import { ChangeCommand } from '../commands/change.js';
 import { ValidateCommand } from '../commands/validate.js';
@@ -230,6 +231,43 @@ program
       process.exit(1);
     }
   });
+
+function dockerWrap<T>(fn: () => T | Promise<T>): Promise<void> {
+  return Promise.resolve()
+    .then(fn)
+    .then(() => {})
+    .catch((error: Error) => {
+      console.log();
+      ora().fail(`Error: ${error.message}`);
+      process.exit(1);
+    });
+}
+
+const dockerCommand = program
+  .command('docker')
+  .description('Run compass web in a Docker container');
+
+dockerCommand
+  .command('up')
+  .description('Start the compass-web container with the project\'s compass/ mounted')
+  .option('--port <port>', 'Host port to publish', '5173')
+  .action((options: { port?: string }) => dockerWrap(() => dockerCmd.up(options)));
+
+dockerCommand
+  .command('down')
+  .description('Stop and remove the compass-web container')
+  .action(() => dockerWrap(() => dockerCmd.down()));
+
+dockerCommand
+  .command('logs')
+  .description('Show compass-web container logs')
+  .option('-f, --follow', 'Follow log output')
+  .action((options: { follow?: boolean }) => dockerWrap(() => dockerCmd.logs(Boolean(options.follow))));
+
+dockerCommand
+  .command('status')
+  .description('Show whether the compass-web container is running')
+  .action(() => dockerWrap(() => dockerCmd.status()));
 
 // Change command with subcommands
 const changeCmd = program
