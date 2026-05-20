@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.6.0 (2026-05-20)
+
+- Rebuild compass web as an admin panel (Tailwind v4 + shadcn-style)
+- Archive add-web-ui change
+
 ## 1.5.0 (2026-05-20)
 
 - Add compass web: browser UI for changes and specs
