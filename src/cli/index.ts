@@ -10,6 +10,7 @@ import { ArchiveCommand } from '../core/archive.js';
 import { ViewCommand } from '../core/view.js';
 import { runWebCommand } from '../commands/web.js';
 import * as dockerCmd from '../commands/docker.js';
+import { upgrade as runUpgrade } from '../commands/upgrade.js';
 import { registerSpecCommand } from '../commands/spec.js';
 import { ChangeCommand } from '../commands/change.js';
 import { ValidateCommand } from '../commands/validate.js';
@@ -268,6 +269,20 @@ dockerCommand
   .command('status')
   .description('Show whether the compass-web container is running')
   .action(() => dockerWrap(() => dockerCmd.status()));
+
+program
+  .command('upgrade')
+  .description('Upgrade compass to the latest version on npm')
+  .option('--check', 'Check for a newer version without installing')
+  .action(async (options: { check?: boolean }) => {
+    try {
+      await runUpgrade(options);
+    } catch (error) {
+      console.log();
+      ora().fail(`Error: ${(error as Error).message}`);
+      process.exit(1);
+    }
+  });
 
 // Change command with subcommands
 const changeCmd = program
