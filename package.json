@@ -38,6 +38,8 @@
     "build": "node build.js",
     "dev": "tsc --watch",
     "dev:cli": "pnpm build && node bin/compass.js",
+    "web:dev": "vite --config web/vite.config.ts",
+    "web:build": "vite build --config web/vite.config.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
@@ -52,10 +54,19 @@
   },
   "devDependencies": {
     "@types/node": "^24.2.0",
+    "@types/react": "^19.2.15",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
     "@vitest/ui": "^3.2.4",
     "eslint": "^9.39.2",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.15.1",
+    "remark-gfm": "^4.0.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.50.1",
+    "vite": "^8.0.13",
     "vitest": "^3.2.4"
   },
   "dependencies": {

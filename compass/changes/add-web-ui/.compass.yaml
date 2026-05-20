@@ -1,0 +1,4 @@
+schema: spec-driven
+created: 2026-05-20
+goal: Make compass artifacts visible in a browser without leaving the working
+  directory
