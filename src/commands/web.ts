@@ -24,7 +24,7 @@ function openInBrowser(url: string): void {
 }
 
 export async function runWebCommand(opts: WebOptions): Promise<void> {
-  const port = opts.port ? Number(opts.port) : 5173;
+  const port = opts.port ? Number(opts.port) : 51234;
   const host = opts.host ?? '127.0.0.1';
   const shouldOpen = opts.open !== false;
 

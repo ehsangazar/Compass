@@ -100,7 +100,7 @@ describe('docker command', () => {
       expect(runArgs).toContain('--name');
       expect(runArgs).toContain('compass-web');
       expect(runArgs).toContain('-p');
-      expect(runArgs).toContain('5173:5173');
+      expect(runArgs).toContain('51234:5173');
       expect(runArgs).toContain('-v');
       expect(runArgs.some((a) => a.includes('/fake/project/compass:/work/compass:ro'))).toBe(true);
 

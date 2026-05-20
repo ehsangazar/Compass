@@ -219,7 +219,7 @@ program
 program
   .command('web')
   .description('Open a local web UI showing compass changes and specs')
-  .option('--port <port>', 'Port to bind', '5173')
+  .option('--port <port>', 'Port to bind', '51234')
   .option('--host <host>', 'Host to bind', '127.0.0.1')
   .option('--no-open', 'Do not open the browser automatically')
   .action(async (options: { port?: string; host?: string; open?: boolean }) => {
@@ -250,7 +250,7 @@ const dockerCommand = program
 dockerCommand
   .command('up')
   .description('Start the compass-web container with the project\'s compass/ mounted')
-  .option('--port <port>', 'Host port to publish', '5173')
+  .option('--port <port>', 'Host port to publish', '51234')
   .action((options: { port?: string }) => dockerWrap(() => dockerCmd.up(options)));
 
 dockerCommand

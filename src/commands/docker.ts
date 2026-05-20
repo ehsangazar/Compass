@@ -7,7 +7,9 @@ import chalk from 'chalk';
 const require = createRequire(import.meta.url);
 
 const CONTAINER_NAME = 'compass-web';
-const DEFAULT_PORT = 5173;
+// 51234 sits in the IANA dynamic range (49152-65535); no registered service
+// uses it, so we dodge clashes with common dev defaults like Vite's 5173.
+const DEFAULT_PORT = 51234;
 const INTERNAL_PORT = 5173;
 
 function compassVersion(): string {
