@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.4.1 (2026-05-20)
+
+- Fix hardcoded gaz/Compass references to ehsangazar/compass
+- Add project README and archive the doc change
+
 ## 1.4.0
 
 ### Minor Changes
