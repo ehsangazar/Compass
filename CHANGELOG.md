@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.10.0 (2026-05-21)
+
+- Auto-pick a free port when the default is busy
+- Remove leftover OpenSpec MAINTAINERS.md + archive add-favicon
+
 ## 1.9.1 (2026-05-21)
 
 - Add SVG favicon (TH navy + white compass + red needle)
