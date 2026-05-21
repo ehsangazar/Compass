@@ -100,7 +100,9 @@ describe('docker command', () => {
       expect(runArgs).toContain('--name');
       expect(runArgs).toContain('compass-web');
       expect(runArgs).toContain('-p');
-      expect(runArgs).toContain('51234:5173');
+      // Default path: scanner returns the first available port from 51234.
+      const portArg = runArgs[runArgs.indexOf('-p') + 1];
+      expect(portArg).toMatch(/^\d+:5173$/);
       expect(runArgs).toContain('-v');
       expect(runArgs.some((a) => a.includes('/fake/project/compass:/work/compass:ro'))).toBe(true);
 
@@ -153,6 +155,8 @@ describe('docker command', () => {
       });
 
       const { up } = await import('../../src/commands/docker.js');
+      // Explicit --port: in the unit test there's no real server bound, so 8080
+      // is considered free by isPortAvailable. Argv should match exactly.
       await up({ port: '8080' });
       const runCall = mockExecFileSync.mock.calls.find((c) => c[1]?.[0] === 'run');
       expect((runCall![1] as string[])).toContain('8080:5173');

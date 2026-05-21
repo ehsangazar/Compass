@@ -3,6 +3,7 @@ import { existsSync } from 'fs';
 import path from 'path';
 import { createRequire } from 'module';
 import chalk from 'chalk';
+import { findAvailablePort, isPortAvailable } from '../utils/port.js';
 
 const require = createRequire(import.meta.url);
 
@@ -111,9 +112,22 @@ export async function up(opts: UpOptions = {}): Promise<void> {
   const repoPath = process.cwd();
   ensureCompassDir(repoPath);
 
-  const port = opts.port ? Number(opts.port) : DEFAULT_PORT;
-  if (Number.isNaN(port) || port <= 0 || port > 65535) {
+  const portRequestedExplicitly = opts.port !== undefined;
+  const requestedPort = opts.port ? Number(opts.port) : DEFAULT_PORT;
+  if (Number.isNaN(requestedPort) || requestedPort <= 0 || requestedPort > 65535) {
     throw new Error(`Invalid --port: ${opts.port}`);
+  }
+
+  let port = requestedPort;
+  if (portRequestedExplicitly) {
+    if (!(await isPortAvailable(requestedPort))) {
+      throw new Error(`Port ${requestedPort} is already in use. Pick another with --port, or omit --port to auto-pick.`);
+    }
+  } else {
+    port = await findAvailablePort(requestedPort);
+    if (port !== requestedPort) {
+      console.log(chalk.dim(`Port ${requestedPort} in use; using ${port} instead.`));
+    }
   }
 
   const version = compassVersion();

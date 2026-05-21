@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import { startWebServer } from '../core/web/server.js';
+import { findAvailablePort, isPortAvailable } from '../utils/port.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,12 +25,26 @@ function openInBrowser(url: string): void {
 }
 
 export async function runWebCommand(opts: WebOptions): Promise<void> {
-  const port = opts.port ? Number(opts.port) : 51234;
+  const DEFAULT_PORT = 51234;
+  const portRequestedExplicitly = opts.port !== undefined;
+  const requestedPort = opts.port ? Number(opts.port) : DEFAULT_PORT;
   const host = opts.host ?? '127.0.0.1';
   const shouldOpen = opts.open !== false;
 
-  if (Number.isNaN(port) || port <= 0 || port > 65535) {
+  if (Number.isNaN(requestedPort) || requestedPort <= 0 || requestedPort > 65535) {
     throw new Error(`Invalid --port: ${opts.port}`);
+  }
+
+  let port = requestedPort;
+  if (portRequestedExplicitly) {
+    if (!(await isPortAvailable(requestedPort, host))) {
+      throw new Error(`Port ${requestedPort} is already in use on ${host}. Pick another with --port, or omit --port to auto-pick.`);
+    }
+  } else {
+    port = await findAvailablePort(requestedPort, { host });
+    if (port !== requestedPort) {
+      console.log(chalk.dim(`Port ${requestedPort} in use; using ${port} instead.`));
+    }
   }
 
   const repoPath = process.cwd();
