@@ -1,5 +1,10 @@
 # @gazarr/compass
 
+## 1.9.1 (2026-05-21)
+
+- Add SVG favicon (TH navy + white compass + red needle)
+- Archive add-upgrade-command change
+
 ## 1.9.0 (2026-05-20)
 
 - Add compass upgrade command
